@@ -185,3 +185,4 @@ wrapt==1.16.0
 xgboost==1.7.6
 xyzservices==2024.4.0
 zipp==3.16.2
+snapml==1.15.6
