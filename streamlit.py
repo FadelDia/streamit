@@ -55,7 +55,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_
     # Model selection
 model_choice = st.selectbox("Choose a model:", ["Scikit-Learn Decision Tree", "Snap ML Decision Tree"])
 
-    if model_choice == "Scikit-Learn Decision Tree":
+if model_choice == "Scikit-Learn Decision Tree":
         # Train Scikit-Learn model
         sklearn_dt = DecisionTreeRegressor(max_depth=8, random_state=35)
         t0 = time.time()
@@ -67,7 +67,7 @@ model_choice = st.selectbox("Choose a model:", ["Scikit-Learn Decision Tree", "S
         y_pred_sklearn = sklearn_dt.predict(X_test)
         st.write("Scikit-Learn Predictions:", y_pred_sklearn)
 
-    elif model_choice == "Snap ML Decision Tree":
+elif model_choice == "Snap ML Decision Tree":
         # Train Snap ML model
         snapml_dt = SnapDecisionTreeRegressor
         snapml_dt = DecisionTreeRegressor(max_depth=8, random_state=45, n_jobs=4)
