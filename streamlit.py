@@ -16,7 +16,7 @@ uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
 
 if uploaded_file is not None:
     # Read the data
-    raw_data = pd.read_csv(yellow_tripdata.csv)
+    raw_data = pd.read_csv("yellow_tripdata.csv")
     st.dataframe(raw_data)
 
     # Preprocess the data
