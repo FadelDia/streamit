@@ -17,10 +17,11 @@ uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
 if uploaded_file is not None:
     # Read the data
     raw_data = pd.read_csv(uploaded_file)
+    st.dataframe(raw_data)
 
     # Preprocess the data
     # raw_data = raw_data[raw_data['tip_amount'] > 0
-    raw_data = raw_data[(raw_data['tip_amount'] <= raw_data['fare_amount'])]
+    # raw_data = raw_data[(raw_data['tip_amount'] <= raw_data['fare_amount'])]
     raw_data = raw_data[((raw_data['fare_amount'] >=2) & (raw_data['fare_amount'] < 200))]
     clean_data = raw_data.drop(['total_amount'], axis=1)
     del raw_data
