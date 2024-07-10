@@ -69,9 +69,14 @@ if model_choice == "Scikit-Learn Decision Tree":
 
 elif model_choice == "Snap ML Decision Tree":
         # Train Snap ML model
-        snapml_dt = SnapDecisionTreeRegressor
-        snapml_dt = DecisionTreeRegressor(max_depth=8, random_state=45, n_jobs=4)
+        
+        snapml_dt = SnapDecisionTreeRegressor(max_depth=8, random_state=45, n_jobs=4)
         t0 = time.time()
         snapml_dt.fit(X_train, y_train)
         snapml_time = time.time()-t0
         st.write("[Snap-ML] Training time (s):  {0:.5f}".format(snapml_time))
+
+        # Make predictions
+        y_pred_snapml = snapml_dt.predict(X_test)
+        st.write("Snap-ML Predictions:", y_pred_snapml)
+
