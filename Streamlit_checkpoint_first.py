@@ -1,4 +1,3 @@
-pip install streamlit
 import streamlit as st
 import pandas as pd
 import joblib  # To load your trained model
