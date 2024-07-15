@@ -1,28 +1,30 @@
 import streamlit as st
 import pandas as pd
-import joblib  # To load your trained model
+import joblib  # Pour charger votre modèle entraîné
 
-# Load your trained model
+# Charger votre modèle entraîné
 model = joblib.load('retrained_model.pkl')
 
-# Create input fields for features
+# Créer des champs de saisie pour les caractéristiques
 st.title('Churn Prediction App')
-# Replace with actual feature names from your dataset
+
+# Remplacer par les noms réels des caractéristiques de votre dataset
 feature1 = st.number_input('REGULARITY')
 feature2 = st.number_input('DATA_VOLUME')
-# ... add input fields for all your features
+# ... ajoutez des champs de saisie pour toutes vos caractéristiques
 
-# Create a validation button
+# Créer un bouton de validation
 if st.button('Predict'):
-    # Create a DataFrame from the input values
+    # Créer un DataFrame à partir des valeurs saisies
     input_data = pd.DataFrame({
         'REGULARITY': [feature1],
         'DATA_VOLUME': [feature2],
-        # ... add all your features
+        # ... ajoutez toutes vos caractéristiques
     })
 
-    # Make prediction using the loaded model
+    # Faire une prédiction en utilisant le modèle chargé
     prediction = model.predict(input_data)
 
-    # Display the prediction
+    # Afficher la prédiction
     st.write('Prediction:', prediction[0])
+
