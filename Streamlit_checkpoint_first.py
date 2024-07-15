@@ -1,40 +1,38 @@
+!pip install streamlit --quiet
 import streamlit as st
 import pandas as pd
-import joblib
+import joblib  # To load your trained model
+import requests
 
-# Titre de l'application
+# URL of your model on GitHub
+model_url = "https://raw.githubusercontent.com/<FadelDia>/<streamlit>/main/retrained_model.pkl"  
+
+# Download the model
+response = requests.get(model_url)
+open("retrained_model.pkl", "wb").write(response.content)
+
+# Load your trained model
+model = joblib.load('retrained_model.pkl')
+
+# Get feature names from the model
+feature_names = model.feature_names_in_
+
+# Create input fields for features
 st.title('Churn Prediction App')
 
-# Chemin d'accès au fichier modèle
-model_path = '/content/trained_model.pkl'
+# Create input fields dynamically
+input_data = {}
+for feature in feature_names:
+    # Assuming all features are numerical
+    input_data[feature] = st.number_input(feature) 
 
-# Charger le modèle depuis le chemin spécifié
-try:
-    model = joblib.load(model_path)
-    st.success("Modèle chargé avec succès!")
-except FileNotFoundError:
-    st.error("Le fichier 'trained_model.pkl' est introuvable.")
-except Exception as e:
-    st.error(f"Erreur lors du chargement du modèle : {e}")
-    model = None
-
-# Créez les champs de saisie pour les fonctionnalités
-feature1 = st.number_input('REGULARITY')
-feature2 = st.number_input('DATA_VOLUME')
-# ... ajoutez des champs de saisie pour toutes vos fonctionnalités
-
-# Créez un bouton de validation
+# Create a validation button
 if st.button('Predict'):
-    if model is not None:
-        input_data = pd.DataFrame({
-            'REGULARITY': [feature1],
-            'DATA_VOLUME': [feature2],
-            # ... ajoutez toutes vos fonctionnalités
-        })
-        try:
-            prediction = model.predict(input_data)
-            st.write('Prediction:', prediction[0])
-        except Exception as e:
-            st.error(f"Erreur lors de la prédiction : {e}")
-    else:
-        st.error("Le modèle n'a pas pu être chargé.")
+    # Create a DataFrame from the input values
+    input_df = pd.DataFrame([input_data])
+
+    # Make prediction using the loaded model
+    prediction = model.predict(input_df)
+
+    # Display the prediction
+    st.write('Prediction:', prediction[0])
