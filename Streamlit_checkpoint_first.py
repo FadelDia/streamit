@@ -14,8 +14,12 @@ if uploaded_file is not None:
     try:
         model = joblib.load(BytesIO(uploaded_file.read()))
         st.success("Modèle chargé avec succès!")
-    except Exception as e:
+    except FileNotFoundError:
+        st.error("Le fichier 'trained_model.pkl' est introuvable.")
+    except joblib.externals.loky.process_executor._RemoteTraceback as e:
         st.error(f"Erreur lors du chargement du modèle : {e}")
+    except Exception as e:
+        st.error(f"Erreur inconnue lors du chargement du modèle : {e}")
         model = None
 
     # Créez les champs de saisie pour les fonctionnalités
