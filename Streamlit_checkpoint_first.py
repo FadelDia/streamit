@@ -7,7 +7,7 @@ from io import BytesIO
 st.title('Churn Prediction App')
 
 # Téléchargement du fichier modèle
-uploaded_file = st.file_uploader("trained_model.pkl", type="pkl")
+uploaded_file = st.file_uploader("trained_model", type="pkl")
 
 if uploaded_file is not None:
     # Charger le modèle depuis le fichier téléchargé
