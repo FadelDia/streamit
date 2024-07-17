@@ -1,269 +1,71 @@
-{
-  "nbformat": 4,
-  "nbformat_minor": 0,
-  "metadata": {
-    "colab": {
-      "provenance": [],
-      "authorship_tag": "ABX9TyPweJt+h41sd6oBAutjeG54",
-      "include_colab_link": true
-    },
-    "kernelspec": {
-      "name": "python3",
-      "display_name": "Python 3"
-    },
-    "language_info": {
-      "name": "python"
-    }
-  },
-  "cells": [
-    {
-      "cell_type": "markdown",
-      "metadata": {
-        "id": "view-in-github",
-        "colab_type": "text"
-      },
-      "source": [
-        "<a href=\"https://colab.research.google.com/github/FadelDia/streamit/blob/main/CHATBOT.ipynb\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
-      ]
-    },
-    {
-      "cell_type": "code",
-      "execution_count": 1,
-      "metadata": {
-        "colab": {
-          "base_uri": "https://localhost:8080/"
-        },
-        "id": "FqHYujenANja",
-        "outputId": "593e9c35-efe8-4c05-c004-849f1778e74b"
-      },
-      "outputs": [
-        {
-          "output_type": "stream",
-          "name": "stdout",
-          "text": [
-            "Requirement already satisfied: nltk in /usr/local/lib/python3.10/dist-packages (3.8.1)\n",
-            "Collecting streamlit\n",
-            "  Downloading streamlit-1.36.0-py2.py3-none-any.whl (8.6 MB)\n",
-            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m8.6/8.6 MB\u001b[0m \u001b[31m13.2 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
-            "\u001b[?25hRequirement already satisfied: click in /usr/local/lib/python3.10/dist-packages (from nltk) (8.1.7)\n",
-            "Requirement already satisfied: joblib in /usr/local/lib/python3.10/dist-packages (from nltk) (1.4.2)\n",
-            "Requirement already satisfied: regex>=2021.8.3 in /usr/local/lib/python3.10/dist-packages (from nltk) (2024.5.15)\n",
-            "Requirement already satisfied: tqdm in /usr/local/lib/python3.10/dist-packages (from nltk) (4.66.4)\n",
-            "Requirement already satisfied: altair<6,>=4.0 in /usr/local/lib/python3.10/dist-packages (from streamlit) (4.2.2)\n",
-            "Requirement already satisfied: blinker<2,>=1.0.0 in /usr/lib/python3/dist-packages (from streamlit) (1.4)\n",
-            "Requirement already satisfied: cachetools<6,>=4.0 in /usr/local/lib/python3.10/dist-packages (from streamlit) (5.3.3)\n",
-            "Requirement already satisfied: numpy<3,>=1.20 in /usr/local/lib/python3.10/dist-packages (from streamlit) (1.25.2)\n",
-            "Requirement already satisfied: packaging<25,>=20 in /usr/local/lib/python3.10/dist-packages (from streamlit) (24.1)\n",
-            "Requirement already satisfied: pandas<3,>=1.3.0 in /usr/local/lib/python3.10/dist-packages (from streamlit) (2.0.3)\n",
-            "Requirement already satisfied: pillow<11,>=7.1.0 in /usr/local/lib/python3.10/dist-packages (from streamlit) (9.4.0)\n",
-            "Requirement already satisfied: protobuf<6,>=3.20 in /usr/local/lib/python3.10/dist-packages (from streamlit) (3.20.3)\n",
-            "Requirement already satisfied: pyarrow>=7.0 in /usr/local/lib/python3.10/dist-packages (from streamlit) (14.0.2)\n",
-            "Requirement already satisfied: requests<3,>=2.27 in /usr/local/lib/python3.10/dist-packages (from streamlit) (2.31.0)\n",
-            "Requirement already satisfied: rich<14,>=10.14.0 in /usr/local/lib/python3.10/dist-packages (from streamlit) (13.7.1)\n",
-            "Requirement already satisfied: tenacity<9,>=8.1.0 in /usr/local/lib/python3.10/dist-packages (from streamlit) (8.5.0)\n",
-            "Requirement already satisfied: toml<2,>=0.10.1 in /usr/local/lib/python3.10/dist-packages (from streamlit) (0.10.2)\n",
-            "Requirement already satisfied: typing-extensions<5,>=4.3.0 in /usr/local/lib/python3.10/dist-packages (from streamlit) (4.12.2)\n",
-            "Collecting gitpython!=3.1.19,<4,>=3.0.7 (from streamlit)\n",
-            "  Downloading GitPython-3.1.43-py3-none-any.whl (207 kB)\n",
-            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m207.3/207.3 kB\u001b[0m \u001b[31m8.0 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
-            "\u001b[?25hCollecting pydeck<1,>=0.8.0b4 (from streamlit)\n",
-            "  Downloading pydeck-0.9.1-py2.py3-none-any.whl (6.9 MB)\n",
-            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m6.9/6.9 MB\u001b[0m \u001b[31m46.7 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
-            "\u001b[?25hRequirement already satisfied: tornado<7,>=6.0.3 in /usr/local/lib/python3.10/dist-packages (from streamlit) (6.3.3)\n",
-            "Collecting watchdog<5,>=2.1.5 (from streamlit)\n",
-            "  Downloading watchdog-4.0.1-py3-none-manylinux2014_x86_64.whl (83 kB)\n",
-            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m83.0/83.0 kB\u001b[0m \u001b[31m4.2 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
-            "\u001b[?25hRequirement already satisfied: entrypoints in /usr/local/lib/python3.10/dist-packages (from altair<6,>=4.0->streamlit) (0.4)\n",
-            "Requirement already satisfied: jinja2 in /usr/local/lib/python3.10/dist-packages (from altair<6,>=4.0->streamlit) (3.1.4)\n",
-            "Requirement already satisfied: jsonschema>=3.0 in /usr/local/lib/python3.10/dist-packages (from altair<6,>=4.0->streamlit) (4.19.2)\n",
-            "Requirement already satisfied: toolz in /usr/local/lib/python3.10/dist-packages (from altair<6,>=4.0->streamlit) (0.12.1)\n",
-            "Collecting gitdb<5,>=4.0.1 (from gitpython!=3.1.19,<4,>=3.0.7->streamlit)\n",
-            "  Downloading gitdb-4.0.11-py3-none-any.whl (62 kB)\n",
-            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m62.7/62.7 kB\u001b[0m \u001b[31m4.7 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
-            "\u001b[?25hRequirement already satisfied: python-dateutil>=2.8.2 in /usr/local/lib/python3.10/dist-packages (from pandas<3,>=1.3.0->streamlit) (2.8.2)\n",
-            "Requirement already satisfied: pytz>=2020.1 in /usr/local/lib/python3.10/dist-packages (from pandas<3,>=1.3.0->streamlit) (2023.4)\n",
-            "Requirement already satisfied: tzdata>=2022.1 in /usr/local/lib/python3.10/dist-packages (from pandas<3,>=1.3.0->streamlit) (2024.1)\n",
-            "Requirement already satisfied: charset-normalizer<4,>=2 in /usr/local/lib/python3.10/dist-packages (from requests<3,>=2.27->streamlit) (3.3.2)\n",
-            "Requirement already satisfied: idna<4,>=2.5 in /usr/local/lib/python3.10/dist-packages (from requests<3,>=2.27->streamlit) (3.7)\n",
-            "Requirement already satisfied: urllib3<3,>=1.21.1 in /usr/local/lib/python3.10/dist-packages (from requests<3,>=2.27->streamlit) (2.0.7)\n",
-            "Requirement already satisfied: certifi>=2017.4.17 in /usr/local/lib/python3.10/dist-packages (from requests<3,>=2.27->streamlit) (2024.7.4)\n",
-            "Requirement already satisfied: markdown-it-py>=2.2.0 in /usr/local/lib/python3.10/dist-packages (from rich<14,>=10.14.0->streamlit) (3.0.0)\n",
-            "Requirement already satisfied: pygments<3.0.0,>=2.13.0 in /usr/local/lib/python3.10/dist-packages (from rich<14,>=10.14.0->streamlit) (2.16.1)\n",
-            "Collecting smmap<6,>=3.0.1 (from gitdb<5,>=4.0.1->gitpython!=3.1.19,<4,>=3.0.7->streamlit)\n",
-            "  Downloading smmap-5.0.1-py3-none-any.whl (24 kB)\n",
-            "Requirement already satisfied: MarkupSafe>=2.0 in /usr/local/lib/python3.10/dist-packages (from jinja2->altair<6,>=4.0->streamlit) (2.1.5)\n",
-            "Requirement already satisfied: attrs>=22.2.0 in /usr/local/lib/python3.10/dist-packages (from jsonschema>=3.0->altair<6,>=4.0->streamlit) (23.2.0)\n",
-            "Requirement already satisfied: jsonschema-specifications>=2023.03.6 in /usr/local/lib/python3.10/dist-packages (from jsonschema>=3.0->altair<6,>=4.0->streamlit) (2023.12.1)\n",
-            "Requirement already satisfied: referencing>=0.28.4 in /usr/local/lib/python3.10/dist-packages (from jsonschema>=3.0->altair<6,>=4.0->streamlit) (0.35.1)\n",
-            "Requirement already satisfied: rpds-py>=0.7.1 in /usr/local/lib/python3.10/dist-packages (from jsonschema>=3.0->altair<6,>=4.0->streamlit) (0.19.0)\n",
-            "Requirement already satisfied: mdurl~=0.1 in /usr/local/lib/python3.10/dist-packages (from markdown-it-py>=2.2.0->rich<14,>=10.14.0->streamlit) (0.1.2)\n",
-            "Requirement already satisfied: six>=1.5 in /usr/local/lib/python3.10/dist-packages (from python-dateutil>=2.8.2->pandas<3,>=1.3.0->streamlit) (1.16.0)\n",
-            "Installing collected packages: watchdog, smmap, pydeck, gitdb, gitpython, streamlit\n",
-            "Successfully installed gitdb-4.0.11 gitpython-3.1.43 pydeck-0.9.1 smmap-5.0.1 streamlit-1.36.0 watchdog-4.0.1\n"
-          ]
-        }
-      ],
-      "source": [
-        "! pip install nltk streamlit\n"
-      ]
-    },
-    {
-      "cell_type": "code",
-      "source": [
-        "import nltk\n",
-        "nltk.download('punkt')\n",
-        "nltk.download('averaged_perceptron_tagger')\n",
-        "# Download the stopwords corpus\n",
-        "nltk.download('stopwords')  # Add this line to download the necessary data\n",
-        "# Download the wordnet corpus\n",
-        "nltk.download('wordnet') # Add this line to download the wordnet corpus\n",
-        "from nltk.tokenize import word_tokenize, sent_tokenize\n",
-        "from nltk.corpus import stopwords\n",
-        "from nltk.stem import WordNetLemmatizer\n",
-        "import string\n",
-        "import streamlit as st"
-      ],
-      "metadata": {
-        "colab": {
-          "base_uri": "https://localhost:8080/"
-        },
-        "id": "nFM_Wx7CDKOp",
-        "outputId": "13218437-eacb-4255-f3c3-4e3c30066907"
-      },
-      "execution_count": 12,
-      "outputs": [
-        {
-          "output_type": "stream",
-          "name": "stderr",
-          "text": [
-            "[nltk_data] Downloading package punkt to /root/nltk_data...\n",
-            "[nltk_data]   Package punkt is already up-to-date!\n",
-            "[nltk_data] Downloading package averaged_perceptron_tagger to\n",
-            "[nltk_data]     /root/nltk_data...\n",
-            "[nltk_data]   Package averaged_perceptron_tagger is already up-to-\n",
-            "[nltk_data]       date!\n",
-            "[nltk_data] Downloading package stopwords to /root/nltk_data...\n",
-            "[nltk_data]   Package stopwords is already up-to-date!\n",
-            "[nltk_data] Downloading package wordnet to /root/nltk_data...\n"
-          ]
-        }
-      ]
-    },
-    {
-      "cell_type": "code",
-      "source": [
-        "# Load the text file and preprocess the data\n",
-        "# Try a different encoding, like 'latin-1'\n",
-        "with open('Law of Success.TXT', 'r', encoding='latin-1') as f:\n",
-        "    data = f.read().replace('\\n', ' ')\n",
-        "# Tokenize the text into sentences\n",
-        "sentences = sent_tokenize(data)\n",
-        "# Define a function to preprocess each sentence\n",
-        "def preprocess(sentence):\n",
-        "    # Tokenize the sentence into words\n",
-        "    words = word_tokenize(sentence)\n",
-        "    # Remove stopwords and punctuation\n",
-        "    words = [word.lower() for word in words if word.lower() not in stopwords.words('english') and word not in string.punctuation]\n",
-        "    # Lemmatize the words\n",
-        "    lemmatizer = WordNetLemmatizer()\n",
-        "    words = [lemmatizer.lemmatize(word) for word in words]\n",
-        "    return words"
-      ],
-      "metadata": {
-        "id": "bHKcP6ItDOL8"
-      },
-      "execution_count": 13,
-      "outputs": []
-    },
-    {
-      "cell_type": "code",
-      "source": [
-        "# Preprocess each sentence in the text\n",
-        "corpus = [preprocess(sentence) for sentence in sentences]"
-      ],
-      "metadata": {
-        "id": "7ys_CZByEkz9"
-      },
-      "execution_count": 14,
-      "outputs": []
-    },
-    {
-      "cell_type": "code",
-      "source": [
-        "# Define a function to find the most relevant sentence given a query\n",
-        "def get_most_relevant_sentence(query):\n",
-        "    # Preprocess the query\n",
-        "    query = preprocess(query)\n",
-        "    # Compute the similarity between the query and each sentence in the text\n",
-        "    max_similarity = 0\n",
-        "    most_relevant_sentence = \"\"\n",
-        "    for sentence in corpus:\n",
-        "        similarity = len(set(query).intersection(sentence)) / float(len(set(query).union(sentence)))\n",
-        "        if similarity > max_similarity:\n",
-        "            max_similarity = similarity\n",
-        "            most_relevant_sentence = \" \".join(sentence)\n",
-        "    return most_relevant_sentence"
-      ],
-      "metadata": {
-        "id": "If9l7_fhGkwR"
-      },
-      "execution_count": 15,
-      "outputs": []
-    },
-    {
-      "cell_type": "code",
-      "source": [
-        "def chatbot(question):\n",
-        "    # Find the most relevant sentence\n",
-        "    most_relevant_sentence = get_most_relevant_sentence(question)\n",
-        "    # Return the answer\n",
-        "    return most_relevant_sentence"
-      ],
-      "metadata": {
-        "id": "MJFtybzNGmzQ"
-      },
-      "execution_count": 16,
-      "outputs": []
-    },
-    {
-      "cell_type": "code",
-      "source": [
-        "# Create a Streamlit app\n",
-        "def main():\n",
-        "    st.title(\"Chatbot\")\n",
-        "    st.write(\"Hello! I'm a chatbot. Ask me anything about the topic in the text file.\")\n",
-        "    # Get the user's question\n",
-        "    question = st.text_input(\"You:\")\n",
-        "    # Create a button to submit the question\n",
-        "    if st.button(\"Submit\"):\n",
-        "        # Call the chatbot function with the question and display the response\n",
-        "        response = chatbot(question)\n",
-        "        st.write(\"Chatbot: \" + response)\n",
-        "if __name__ == \"__main__\":\n",
-        "    main()"
-      ],
-      "metadata": {
-        "colab": {
-          "base_uri": "https://localhost:8080/"
-        },
-        "id": "fCsHjokqGqT1",
-        "outputId": "05bdba25-9177-4ada-a0ad-20e952b466ac"
-      },
-      "execution_count": 17,
-      "outputs": [
-        {
-          "output_type": "stream",
-          "name": "stderr",
-          "text": [
-            "2024-07-17 14:31:23.870 \n",
-            "  \u001b[33m\u001b[1mWarning:\u001b[0m to view this Streamlit app on a browser, run it with the following\n",
-            "  command:\n",
-            "\n",
-            "    streamlit run /usr/local/lib/python3.10/dist-packages/colab_kernel_launcher.py [ARGUMENTS]\n",
-            "2024-07-17 14:31:23.886 Session state does not function when running a script without `streamlit run`\n"
-          ]
-        }
-      ]
-    }
-  ]
-}
+pip install nltk streamlit
+
+import nltk
+nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
+# Download the stopwords corpus
+nltk.download('stopwords')  # Add this line to download the necessary data
+# Download the wordnet corpus
+nltk.download('wordnet') # Add this line to download the wordnet corpus
+from nltk.tokenize import word_tokenize, sent_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+import string
+import streamlit as st
+
+# Load the text file and preprocess the data
+# Try a different encoding, like 'latin-1'
+with open('Law of Success.TXT', 'r', encoding='latin-1') as f:
+    data = f.read().replace('\n', ' ')
+# Tokenize the text into sentences
+sentences = sent_tokenize(data)
+# Define a function to preprocess each sentence
+def preprocess(sentence):
+    # Tokenize the sentence into words
+    words = word_tokenize(sentence)
+    # Remove stopwords and punctuation
+    words = [word.lower() for word in words if word.lower() not in stopwords.words('english') and word not in string.punctuation]
+    # Lemmatize the words
+    lemmatizer = WordNetLemmatizer()
+    words = [lemmatizer.lemmatize(word) for word in words]
+    return words
+ # Preprocess each sentence in the text
+corpus = [preprocess(sentence) for sentence in sentences]
+
+# Define a function to find the most relevant sentence given a query
+def get_most_relevant_sentence(query):
+    # Preprocess the query
+    query = preprocess(query)
+    # Compute the similarity between the query and each sentence in the text
+    max_similarity = 0
+    most_relevant_sentence = ""
+    for sentence in corpus:
+        similarity = len(set(query).intersection(sentence)) / float(len(set(query).union(sentence)))
+        if similarity > max_similarity:
+            max_similarity = similarity
+            most_relevant_sentence = " ".join(sentence)
+    return most_relevant_sentence
+
+
+def chatbot(question):
+    # Find the most relevant sentence
+    most_relevant_sentence = get_most_relevant_sentence(question)
+    # Return the answer
+    return most_relevant_sentence
+
+
+# Create a Streamlit app
+def main():
+    st.title("Chatbot")
+    st.write("Hello! I'm a chatbot. Ask me anything about the topic in the text file.")
+    # Get the user's question
+    question = st.text_input("You:")
+    # Create a button to submit the question
+    if st.button("Submit"):
+        # Call the chatbot function with the question and display the response
+        response = chatbot(question)
+        st.write("Chatbot: " + response)
+if __name__ == "__main__":
+    main()
+
+
