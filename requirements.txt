@@ -141,7 +141,6 @@ st-annotated-text==4.0.1
 st-theme==1.2.3
 stack-data==0.6.3
 statsmodels==0.14.2
-streamlit==1.23.1
 streamlit==1.36.0
 streamlit-camera-input-live==0.2.0
 streamlit-card==1.0.2
