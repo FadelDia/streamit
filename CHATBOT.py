@@ -1,70 +1,124 @@
-
-import nltk
-nltk.download('punkt')
-nltk.download('averaged_perceptron_tagger')
-# Download the stopwords corpus
-nltk.download('stopwords')  # Add this line to download the necessary data
-# Download the wordnet corpus
-nltk.download('wordnet') # Add this line to download the wordnet corpus
-from nltk.tokenize import word_tokenize, sent_tokenize
-from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
-import string
+from dataclasses import dataclass
+from typing import Literal
 import streamlit as st
 
-# Load the text file and preprocess the data
-# Try a different encoding, like 'latin-1'
-with open('Law of Success.TXT', 'r', encoding='latin-1') as f:
-    data = f.read().replace('\n', ' ')
-# Tokenize the text into sentences
-sentences = sent_tokenize(data)
-# Define a function to preprocess each sentence
-def preprocess(sentence):
-    # Tokenize the sentence into words
-    words = word_tokenize(sentence)
-    # Remove stopwords and punctuation
-    words = [word.lower() for word in words if word.lower() not in stopwords.words('english') and word not in string.punctuation]
-    # Lemmatize the words
-    lemmatizer = WordNetLemmatizer()
-    words = [lemmatizer.lemmatize(word) for word in words]
-    return words
- # Preprocess each sentence in the text
-corpus = [preprocess(sentence) for sentence in sentences]
+from langchain import OpenAI
+from langchain.callbacks import get_openai_callback
+from langchain.chains import ConversationChain
+from langchain.chains.conversation.memory import ConversationSummaryMemory
+import streamlit.components.v1 as components
 
-# Define a function to find the most relevant sentence given a query
-def get_most_relevant_sentence(query):
-    # Preprocess the query
-    query = preprocess(query)
-    # Compute the similarity between the query and each sentence in the text
-    max_similarity = 0
-    most_relevant_sentence = ""
-    for sentence in corpus:
-        similarity = len(set(query).intersection(sentence)) / float(len(set(query).union(sentence)))
-        if similarity > max_similarity:
-            max_similarity = similarity
-            most_relevant_sentence = " ".join(sentence)
-    return most_relevant_sentence
+@dataclass
+class Message:
+    """Class for keeping track of a chat message."""
+    origin: Literal["human", "ai"]
+    message: str
 
+def load_css():
+    with open("static/styles.css", "r") as f:
+        css = f"<style>{f.read()}</style>"
+        st.markdown(css, unsafe_allow_html=True)
 
-def chatbot(question):
-    # Find the most relevant sentence
-    most_relevant_sentence = get_most_relevant_sentence(question)
-    # Return the answer
-    return most_relevant_sentence
+def initialize_session_state():
+    if "history" not in st.session_state:
+        st.session_state.history = []
+    if "token_count" not in st.session_state:
+        st.session_state.token_count = 0
+    if "conversation" not in st.session_state:
+        llm = OpenAI(
+            temperature=0,
+            openai_api_key=st.secrets["openai_api_key"],
+            model_name="text-davinci-003"
+        )
+        st.session_state.conversation = ConversationChain(
+            llm=llm,
+            memory=ConversationSummaryMemory(llm=llm),
+        )
 
+def on_click_callback():
+    with get_openai_callback() as cb:
+        human_prompt = st.session_state.human_prompt
+        llm_response = st.session_state.conversation.run(
+            human_prompt
+        )
+        st.session_state.history.append(
+            Message("human", human_prompt)
+        )
+        st.session_state.history.append(
+            Message("ai", llm_response)
+        )
+        st.session_state.token_count += cb.total_tokens
 
-# Create a Streamlit app
-def main():
-    st.title("Chatbot")
-    st.write("Hello! I'm a chatbot. Ask me anything about the topic in the text file.")
-    # Get the user's question
-    question = st.text_input("You:")
-    # Create a button to submit the question
-    if st.button("Submit"):
-        # Call the chatbot function with the question and display the response
-        response = chatbot(question)
-        st.write("Chatbot: " + response)
-if __name__ == "__main__":
-    main()
+load_css()
+initialize_session_state()
 
+st.title("Hello Custom CSS Chatbot 🤖")
 
+chat_placeholder = st.container()
+prompt_placeholder = st.form("chat-form")
+credit_card_placeholder = st.empty()
+
+with chat_placeholder:
+    for chat in st.session_state.history:
+        div = f"""
+<div class="chat-row 
+    {'' if chat.origin == 'ai' else 'row-reverse'}">
+    <img class="chat-icon" src="app/static/{
+        'ai_icon.png' if chat.origin == 'ai' 
+                      else 'user_icon.png'}"
+         width=32 height=32>
+    <div class="chat-bubble
+    {'ai-bubble' if chat.origin == 'ai' else 'human-bubble'}">
+        &#8203;{chat.message}
+    </div>
+</div>
+        """
+        st.markdown(div, unsafe_allow_html=True)
+    
+    for _ in range(3):
+        st.markdown("")
+
+with prompt_placeholder:
+    st.markdown("**Chat**")
+    cols = st.columns((6, 1))
+    cols[0].text_input(
+        "Chat",
+        value="Hello bot",
+        label_visibility="collapsed",
+        key="human_prompt",
+    )
+    cols[1].form_submit_button(
+        "Submit", 
+        type="primary", 
+        on_click=on_click_callback, 
+    )
+
+credit_card_placeholder.caption(f"""
+Used {st.session_state.token_count} tokens \n
+Debug Langchain conversation: 
+{st.session_state.conversation.memory.buffer}
+""")
+
+components.html("""
+<script>
+const streamlitDoc = window.parent.document;
+
+const buttons = Array.from(
+    streamlitDoc.querySelectorAll('.stButton > button')
+);
+const submitButton = buttons.find(
+    el => el.innerText === 'Submit'
+);
+
+streamlitDoc.addEventListener('keydown', function(e) {
+    switch (e.key) {
+        case 'Enter':
+            submitButton.click();
+            break;
+    }
+});
+</script>
+""", 
+    height=0,
+    width=0,
+)
