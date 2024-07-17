@@ -1,5 +1,4 @@
-nltk==3.8.1
-streamlit==1.23.1
+
 
 import nltk
 nltk.download('punkt')
