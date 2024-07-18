@@ -8,9 +8,8 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 import string
 import streamlit as st
-
 # Load and preprocess data (adjust path if needed)
-with open('Can't hurt me.docx') as f:
+with open('Can\'t hurt me.docx') as f:
     data = f.read().replace('\n', ' ')
 sentences = sent_tokenize(data)
 
@@ -49,5 +48,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
