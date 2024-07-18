@@ -1,12 +1,17 @@
 import cv2
 import streamlit as st
 
+# Charger le classificateur de cascade de visages
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+
 def detect_faces():
     # Initialisation de la webcam
     cap = cv2.VideoCapture(0)
     while True:
         # Lecture des images de la webcam
         ret, frame = cap.read()
+        if not ret:
+            break  # Sortir de la boucle si la lecture échoue
         # Conversion des images en niveaux de gris
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         # Détection des visages à l'aide du classificateur de cascade de visages
@@ -25,9 +30,9 @@ def detect_faces():
 
 def app():
     st.title("Face Detection using Viola-Jones Algorithm")
-    st.write("Press the button below to start detecting faces from your webcam")
+    st.write("Appuyez sur le bouton ci-dessous pour commencer la détection des visages depuis votre webcam")
     # Ajout d'un bouton pour démarrer la détection des visages
-    if st.button("Detect Faces"):
+    if st.button("Détecter les visages"):
         # Appel de la fonction detect_faces
         detect_faces()
 
