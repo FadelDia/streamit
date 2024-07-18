@@ -10,7 +10,7 @@ import string
 import streamlit as st
 
 # Load and preprocess data (adjust path if needed)
-with open('Can't hurt me.docx', 'r') as f:
+with open('Can't hurt me.docx') as f:
     data = f.read().replace('\n', ' ')
 sentences = sent_tokenize(data)
 
