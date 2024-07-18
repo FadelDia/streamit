@@ -1,3 +1,4 @@
+
 import nltk
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
@@ -8,9 +9,10 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 import string
 import streamlit as st
-# Load and preprocess data (adjust path if needed)
-with open('Can\'t hurt me.docx') as f:
-    data = f.read().replace('\n', ' ')
+import docx2txt
+
+# Load and preprocess data 
+data = docx2txt.process("Can't hurt me.docx").replace('\n', ' ')
 sentences = sent_tokenize(data)
 
 def preprocess(sentence):
