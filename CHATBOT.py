@@ -12,7 +12,7 @@ import string
 import streamlit as st
 # %%
 # Load the text file and preprocess the data
-with open('Textfile.TXT', 'r') as f: # Encodage par défaut utilisé ici
+with open('Textfile.txt', 'r') as f: # Encodage par défaut utilisé ici
     data = f.read().replace('\n', ' ')
 # Tokenize the text into sentences
 sentences = sent_tokenize(data)
