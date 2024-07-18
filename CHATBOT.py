@@ -1,5 +1,3 @@
-from IPython import get_ipython
-from IPython.display import display
 import nltk
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
@@ -14,8 +12,7 @@ import string
 import streamlit as st
 # %%
 # Load the text file and preprocess the data
-# Try a different encoding, like 'latin-1'
-with open('Textfile.txt', 'r', encoding='latin-1') as f:
+with open('Textfile.TXT', 'r') as f: # Encodage par défaut utilisé ici
     data = f.read().replace('\n', ' ')
 # Tokenize the text into sentences
 sentences = sent_tokenize(data)
