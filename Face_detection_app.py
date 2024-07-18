@@ -1,4 +1,4 @@
-
+import streamlit as st
 
 def detect_faces():
     # Initialisation de la webcam
