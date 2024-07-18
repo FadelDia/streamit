@@ -1,3 +1,4 @@
+import cv2
 import streamlit as st
 
 def detect_faces():
