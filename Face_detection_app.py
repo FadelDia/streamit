@@ -26,7 +26,7 @@ def detect_faces():
             break
     # Libération de la webcam et fermeture de toutes les fenêtres
     cap.release()
-    cv2.destroyAllWindows()
+
 
 def app():
     st.title("Face Detection using Viola-Jones Algorithm")
