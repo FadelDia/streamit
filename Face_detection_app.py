@@ -1,36 +1,40 @@
 import cv2
 import streamlit as st
-import numpy as np
 
-# Load the face cascade classifier
+# Charger le classificateur de cascade de visages
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
 def detect_faces():
-    # Initialize the webcam
+    # Initialisation de la webcam
     cap = cv2.VideoCapture(0)
-    st.write("Press 'q' to stop detecting faces")
     while True:
-        # Read frames from the webcam
+        # Lecture des images de la webcam
         ret, frame = cap.read()
         if not ret:
-            break  # Exit the loop if reading fails
-        # Convert frames to grayscale
+            break  # Sortir de la boucle si la lecture échoue
+        # Conversion des images en niveaux de gris
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        # Detect faces using the face cascade classifier
+        # Détection des visages à l'aide du classificateur de cascade de visages
         faces = face_cascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
-        # Draw rectangles around the detected faces
+        # Dessin de rectangles autour des visages détectés
         for (x, y, w, h) in faces:
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-        # Convert the frame to RGB (required by Streamlit)
-        frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        # Display the frames in Streamlit
-        st.image(frame_rgb, channels="RGB", use_column_width=True)
-        # Exit the loop when 'q' is pressed
+        # Affichage des images
+        cv2.imshow('Face Detection using Viola-Jones Algorithm', frame)
+        # Sortie de la boucle lorsque 'q' est pressé
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-    # Release the webcam
+    # Libération de la webcam et fermeture de toutes les fenêtres
     cap.release()
+    cv2.destroyAllWindows()
+
+def app():
+    st.title("Face Detection using Viola-Jones Algorithm")
+    st.write("Appuyez sur le bouton ci-dessous pour commencer la détection des visages depuis votre webcam")
+    # Ajout d'un bouton pour démarrer la détection des visages
+    if st.button("Détecter les visages"):
+        # Appel de la fonction detect_faces
+        detect_faces()
 
 if __name__ == "__main__":
-    st.title("Face Detection using Viola-Jones Algorithm")
-    detect_faces()
+    app()
