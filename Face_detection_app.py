@@ -1,39 +1,39 @@
 import cv2
 import streamlit as st
 
-# Charger le classificateur de cascade de visages
+# Load the face cascade classifier
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
 def detect_faces():
-    # Initialisation de la webcam
+    # Initialize the webcam
     cap = cv2.VideoCapture(0)
     while True:
-        # Lecture des images de la webcam
+        # Read frames from the webcam
         ret, frame = cap.read()
         if not ret:
-            break  # Sortir de la boucle si la lecture échoue
-        # Conversion des images en niveaux de gris
+            break  # Exit the loop if reading fails
+        # Convert frames to grayscale
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        # Détection des visages à l'aide du classificateur de cascade de visages
+        # Detect faces using the face cascade classifier
         faces = face_cascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
-        # Dessin de rectangles autour des visages détectés
+        # Draw rectangles around the detected faces
         for (x, y, w, h) in faces:
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-        # Affichage des images
+        # Display the frames
         cv2.imshow('Face Detection using Viola-Jones Algorithm', frame)
-        # Sortie de la boucle lorsque 'q' est pressé
+        # Exit the loop when 'q' is pressed
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-    # Libération de la webcam et fermeture de toutes les fenêtres
+    # Release the webcam and close all windows
     cap.release()
     cv2.destroyAllWindows()
 
 def app():
     st.title("Face Detection using Viola-Jones Algorithm")
-    st.write("Appuyez sur le bouton ci-dessous pour commencer la détection des visages depuis votre webcam")
-    # Ajout d'un bouton pour démarrer la détection des visages
-    if st.button("Détecter les visages"):
-        # Appel de la fonction detect_faces
+    st.write("Press the button below to start detecting faces from your webcam")
+    # Add a button to start detecting faces
+    if st.button("Detect Faces"):
+        # Call the detect_faces function
         detect_faces()
 
 if __name__ == "__main__":
