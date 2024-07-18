@@ -1,8 +1,5 @@
 
 
-# Initialisation de la cascade de visages
-face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-
 def detect_faces():
     # Initialisation de la webcam
     cap = cv2.VideoCapture(0)
