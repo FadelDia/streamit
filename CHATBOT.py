@@ -15,7 +15,7 @@ import streamlit as st
 # %%
 # Load the text file and preprocess the data
 # Try a different encoding, like 'latin-1'
-with open('Law of Success.TXT', 'r', encoding='latin-1') as f:
+with open('Textfile.TXT', 'r', encoding='latin-1') as f:
     data = f.read().replace('\n', ' ')
 # Tokenize the text into sentences
 sentences = sent_tokenize(data)
