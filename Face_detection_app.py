@@ -1,3 +1,5 @@
+sudo apt-get install python-opencv
+
 import cv2
 import streamlit as st
 
