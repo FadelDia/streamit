@@ -1,31 +1,37 @@
+
+
+# Initialisation de la cascade de visages
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+
 def detect_faces():
-    # Initialize the webcam
+    # Initialisation de la webcam
     cap = cv2.VideoCapture(0)
     while True:
-        # Read the frames from the webcam
+        # Lecture des images de la webcam
         ret, frame = cap.read()
-        # Convert the frames to grayscale
+        # Conversion des images en niveaux de gris
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        # Detect the faces using the face cascade classifier
+        # Détection des visages à l'aide du classificateur de cascade de visages
         faces = face_cascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
-        # Draw rectangles around the detected faces
+        # Dessin de rectangles autour des visages détectés
         for (x, y, w, h) in faces:
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-        # Display the frames
+        # Affichage des images
         cv2.imshow('Face Detection using Viola-Jones Algorithm', frame)
-        # Exit the loop when 'q' is pressed
+        # Sortie de la boucle lorsque 'q' est pressé
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-    # Release the webcam and close all windows
+    # Libération de la webcam et fermeture de toutes les fenêtres
     cap.release()
     cv2.destroyAllWindows()
 
 def app():
     st.title("Face Detection using Viola-Jones Algorithm")
     st.write("Press the button below to start detecting faces from your webcam")
-    # Add a button to start detecting faces
+    # Ajout d'un bouton pour démarrer la détection des visages
     if st.button("Detect Faces"):
-        # Call the detect_faces function
+        # Appel de la fonction detect_faces
         detect_faces()
+
 if __name__ == "__main__":
     app()
