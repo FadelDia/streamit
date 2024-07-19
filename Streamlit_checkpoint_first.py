@@ -1,3 +1,49 @@
+import pandas as pd
+import numpy as np
+
+df = pd.read_csv('Expresso_churn_dataset.csv', on_bad_lines='skip')
+
+df_half = df.iloc[:len(df)//10, :]
+import numpy as np
+
+# replace "?" to NaN
+df_half.replace("?", np.nan, inplace = True)
+df_half.head(10)
+
+# Remove duplicates
+df_half.drop_duplicates(inplace=True)
+
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+
+# Change data types of specified columns to 'object' (categorical)
+df_half['user_id'] = df_half['user_id'].astype('object')
+
+# Use LabelEncoder to convert categorical columns to numerical
+label_encoder = LabelEncoder()
+df_half['REGION'] = label_encoder.fit_transform(df_half['REGION'])
+df_half['TENURE'] = label_encoder.fit_transform(df_half['TENURE'])
+df_half['MRG'] = label_encoder.fit_transform(df_half['MRG'])
+
+# simply drop whole row with NaN in "price" column
+df_half.dropna(subset=["REGION"],axis=0,inplace=True)
+df_half.dropna(subset=["MONTANT"],axis=0,inplace=True)
+df_half.dropna(subset=["FREQUENCE_RECH"],axis=0,inplace=True)
+df_half.dropna(subset=["REVENUE"],axis=0,inplace=True)
+df_half.dropna(subset=["ARPU_SEGMENT"],axis=0,inplace=True)
+df_half.dropna(subset=["FREQUENCE"],axis=0,inplace=True)
+df_half.dropna(subset=["DATA_VOLUME"],axis=0,inplace=True)
+df_half.dropna(subset=["ON_NET"],axis=0,inplace=True)
+df_half.dropna(subset=["ORANGE"],axis=0,inplace=True)
+df_half.dropna(subset=["TIGO"],axis=0,inplace=True)
+df_half.dropna(subset=["ZONE1"],axis=0,inplace=True)
+df_half.dropna(subset=["ZONE2"],axis=0,inplace=True)
+df_half.dropna(subset=["TOP_PACK"],axis=0,inplace=True)
+df_half.dropna(subset=["FREQ_TOP_PACK"],axis=0,inplace=True)
+
+# reset index, because we droped two rows
+df_half.reset_index(drop=True, inplace=True)
+
 import streamlit as st
 import pandas as pd
 from sklearn.model_selection import train_test_split
