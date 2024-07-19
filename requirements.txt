@@ -106,6 +106,7 @@ plotly-express==0.4.1
 prometheus_client==0.20.0
 prompt-toolkit==3.0.43
 protobuf==
+pyaudio==0.2.11
 pydantic==2.7.1
 pydantic_core==2.18.2
 pydeck==0.8.0
@@ -132,6 +133,9 @@ seaborn==0.12.2
 six==1.16.0
 smmap==5.0.0
 soupsieve==2.5
+streamlit==0.89.0
+pyaudio==0.2.11
+speechrecognition==3.8.1
 SpeechRecognition==3.10.0
 SQLAlchemy==2.0.29
 sqlparse==0.5.0
