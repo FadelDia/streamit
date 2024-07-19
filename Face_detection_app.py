@@ -1,41 +1,58 @@
-import cv2
 import streamlit as st
+import cv2
+from PIL import Image
+from base64 import b64decode
 
-# Charger le classificateur de cascade de visages
-face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+def take_photo(quality=0.8):
+    js = Javascript('''
+    async function takePhoto(quality) {
+        const div = document.createElement('div');
+        const capture = document.createElement('button');
+        capture.textContent = 'Capture';
+        div.appendChild(capture);
+        const video = document.createElement('video');
+        video.style.display = 'block';
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        document.body.appendChild(div);
+        div.appendChild(video);
+        video.srcObject = stream;
+        await video.play();
+        // Resize the output to fit the video element.
+        google.colab.output.setIframeHeight(document.documentElement.scrollHeight, true);
+        // Wait for Capture to be clicked.
+        await new Promise((resolve) => capture.onclick = resolve);
+        const canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        canvas.getContext('2d').drawImage(video, 0, 0);
+        stream.getVideoTracks()[0].stop();
+        div.remove();
+        return canvas.toDataURL('image/jpeg', quality);
+    }
+    ''')
+    display(js)
+    data = eval_js('takePhoto({})'.format(quality))
+    binary = b64decode(data.split(',')[1])
+    return binary
 
-def detect_faces():
-    # Initialisation de la webcam
-    cap = cv2.VideoCapture(0)
-    while True:
-        # Lecture des images de la webcam
-        ret, frame = cap.read()
-        if not ret:
-            break  # Sortir de la boucle si la lecture échoue
-        # Conversion des images en niveaux de gris
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        # Détection des visages à l'aide du classificateur de cascade de visages
-        faces = face_cascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
-        # Dessin de rectangles autour des visages détectés
-        for (x, y, w, h) in faces:
-            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-        # Affichage des images
-        cv2.imshow('Face Detection using Viola-Jones Algorithm', frame)
-        # Sortie de la boucle lorsque 'q' est pressé
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-    # Libération de la webcam et fermeture de toutes les fenêtres
-    cap.release()
-    cv2.destroyAllWindows()
+def detect_faces(img):
+    gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+    faces = face_cascade.detectMultiScale(gray_img, scaleFactor=1.1, minNeighbors=5)
+    for (x, y, w, h) in faces:
+        cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
+    return img
 
+# Streamlit app
+st.title("Face Detection App")
 
-def app():
-    st.title("Face Detection using Viola-Jones Algorithm")
-    st.write("Appuyez sur le bouton ci-dessous pour commencer la détection des visages depuis votre webcam")
-    # Ajout d'un bouton pour démarrer la détection des visages
-    if st.button("Détecter les visages"):
-        # Appel de la fonction detect_faces
-        detect_faces()
+# Capture photo
+img_bytes = take_photo()
 
-if __name__ == "__main__":
-    app()
+if img_bytes:
+    # Process image
+    img = cv2.imdecode(np.frombuffer(img_bytes, np.uint8), cv2.IMREAD_COLOR)
+    img_with_faces = detect_faces(img)
+
+    # Display image
+    st.image(img_with_faces, channels="BGR")
