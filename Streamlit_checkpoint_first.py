@@ -3,7 +3,7 @@ import pandas as pd
 import joblib  # Pour charger votre modèle entraîné
 
 # Charger votre modèle entraîné
-model = joblib.load('retrained_model.plk')
+model = joblib.load('retrained_model1.plk')
 
 # Créer des champs de saisie pour les caractéristiques
 st.title('Churn Prediction App')
